@@ -1,16 +1,13 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
-
-import Auxiliar.Constantes;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.lucene.analysis.es.SpanishAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.*;
 import org.apache.lucene.store.*;
@@ -29,15 +26,27 @@ public class Searcher {
         System.out.println("Searching.... '" + searchString + "'");
         
         try {
-            IndexReader reader = IndexReader.open(FSDirectory.open(new File(Constantes.DIRECTORIO_INDEXAR)), true);
+        	
+        	//Se define el indice
+    		SpanishAnalyzer analizador = new SpanishAnalyzer(Version.LUCENE_40);                
+            Directory directorioIndex = new SimpleFSDirectory(new File(LuceneConstants.HOMEPATH+LuceneConstants.INDICE));
+//            IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_40, analizador);
+//            config.setOpenMode(OpenMode.CREATE);
+            
+            IndexReader reader = IndexReader.open(directorioIndex);
             IndexSearcher searcher = new IndexSearcher(reader);
+        	
+//            IndexReader reader = IndexReader.open(FSDirectory.open(new File(LuceneConstants.HOMEPATH+LuceneConstants.INDICE)), true);
+//            IndexSearcher searcher = new IndexSearcher(reader);
 
             // Analizador en español. Ya contiene los StopWords en español.
             // El mismo analizador se tiene que usar en el indexado y en la busqueda.
-            SpanishAnalyzer analizador = new SpanishAnalyzer(Version.LUCENE_36);
+            
+            QueryParser qp = new QueryParser("contents", analizador);
+            Query query = qp.parse(searchString); // parse the query and construct the Query object            
 
-            QueryParser qp = new QueryParser(Version.LUCENE_36, "contents", analizador);
-            Query query = qp.parse(searchString); // parse the query and construct the Query object
+//            QueryParser qp = new QueryParser(Version.LUCENE_40, "contents", analizador);
+//            Query query = qp.parse(searchString); // parse the query and construct the Query object
 
             TopDocs hits = searcher.search(query, 1000); // run the query
 

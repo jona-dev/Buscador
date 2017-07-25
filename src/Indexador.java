@@ -26,7 +26,7 @@ public class Indexador {
 
 	public static void main(String[] args) throws Exception {
 		try {
-			AddDocumentToIndex("C:/Jonathan/Facultad/Análisis y recuperación de información/workspace/tripAdvison2");
+			AddDocumentToIndex(LuceneConstants.HOMEPATH);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			System.out.println(e.getMessage());
@@ -42,12 +42,12 @@ public class Indexador {
 
 		//Se carga
 		SpanishAnalyzer analizador = new SpanishAnalyzer(Version.LUCENE_40);                
-        Directory directorioIndex = new SimpleFSDirectory(new File(indexPath+"/Index"));
+        Directory directorioIndex = new SimpleFSDirectory(new File(indexPath+LuceneConstants.INDICE));
         IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_40, analizador);
         config.setOpenMode(OpenMode.CREATE);
         IndexWriter iwriter = new IndexWriter(directorioIndex,config);
 		
-		File directory = new File(indexPath+"/Corpus/All");
+		File directory = new File(indexPath+LuceneConstants.FILE_PATH);
 		for(File folders : directory.listFiles()){//newyork
 			if (folders.isDirectory())
 				for(File documents : folders.listFiles()){
@@ -61,21 +61,6 @@ public class Indexador {
 			}
 		iwriter.close();
 	}
-		
-//		public static void CreateIndex(String indexPath,boolean create) throws IOException
-//		{
-//			Directory dir = FSDirectory.open(new File(indexPath));
-//			Analyzer analyzer =new SimpleAnalyzer(Version.LUCENE_40);
-//			IndexWriterConfig iwc =
-//			new IndexWriterConfig(Version.LUCENE_40, analyzer);
-//			if (create) {
-//			iwc.setOpenMode(OpenMode.CREATE);
-//			} else {
-//			iwc.setOpenMode(OpenMode.CREATE_OR_APPEND);
-//			}
-//			writer = new IndexWriter(dir, iwc);
-//		}
-//	
 
 }
 	
