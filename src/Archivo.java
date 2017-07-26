@@ -10,6 +10,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Field.Store;
+import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -24,8 +25,10 @@ import org.xml.sax.InputSource;
 		private Field date;
 		private Field content;
 		private Field respuesta;
+		private Field url;
 		
 	  
+	@SuppressWarnings("deprecation")
 	public org.apache.lucene.document.Document  addFile(File inputFile) throws Exception{
 			
 			 //Estructura para poder leer el archivo xml
@@ -33,8 +36,11 @@ import org.xml.sax.InputSource;
 	         docXml.getDocumentElement().normalize();
 	         //Documento a importar al indice.
 	         org.apache.lucene.document.Document docField = new org.apache.lucene.document.Document(); 
-	         
+	   
 	         //Obtener los Field correspondientes
+	        this.url = new StringField("url", inputFile.getPath(),Store.YES);
+	        docField.add(this.url);
+	        //index
             this.threadID=getDataXml(docXml,"Thread","ThreadID",Store.NO);
             docField.add(this.threadID);
 

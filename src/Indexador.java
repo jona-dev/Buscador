@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -25,12 +26,9 @@ public class Indexador {
 	public static IndexWriter writer;
 
 	public static void main(String[] args) throws Exception {
-		try {
-			AddDocumentToIndex(LuceneConstants.HOMEPATH);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			System.out.println(e.getMessage());
-		}
+//					AddDocumentToIndex(LuceneConstants.HOMEPATH);
+					Searcher searcher = new Searcher();
+					List<String> ResultList = searcher.searchIndex("shopaddict");
 		
 	}
 
