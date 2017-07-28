@@ -39,7 +39,7 @@ public class Searcher {
             // El mismo analizador se tiene que usar en el indexado y en la busqueda.
                      
 
-            QueryParser qp = new QueryParser(Version.LUCENE_40, LuceneConstants.CONTENT, analizador);
+            QueryParser qp = new QueryParser(Version.LUCENE_40, LuceneConstants.ALL, analizador);
             Query query = qp.parse(searchString); // parse the query and construct the Query object
 
             TopDocs hits = searcher.search(query, 1000); // run the query

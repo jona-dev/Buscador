@@ -20,63 +20,82 @@ import org.xml.sax.InputSource;
 
 
 	public class Archivo  {
-		private Field threadID;
-		private Field userID;
-		private Field date;
-		private Field content;
-		private Field respuesta;
-		private Field url;
 		
 	  
 	@SuppressWarnings("deprecation")
 	public org.apache.lucene.document.Document  addFile(File inputFile) throws Exception{
-			
-			 //Estructura para poder leer el archivo xml
-			 Document docXml = loadXMLFromString(readFileAsString(inputFile.getPath()));//espera un string 
-	         docXml.getDocumentElement().normalize();
-	         //Documento a importar al indice.
-	         org.apache.lucene.document.Document docField = new org.apache.lucene.document.Document(); 
-	   
-	         //Obtener los Field correspondientes
-	        this.url = new StringField("url", inputFile.getPath(),Store.YES);
-	        docField.add(this.url);
-	        //index
-            this.threadID=getDataXml(docXml,"Thread","ThreadID",Store.NO);
-            docField.add(this.threadID);
+		
+		//declaración de datos importantes  de los post
+		 Field threadID;
+		 Field userID;
+		 Field date;
+		 Field content;
+		 Field respuesta;
+		 Field url;
+		 Field all;
+		 String allString = new String();
+		 
+		 //Estructura para poder leer el archivo xml
+		 Document docXml = loadXMLFromString(readFileAsString(inputFile.getPath()));
+         docXml.getDocumentElement().normalize();
+         //Documento a importar al indice.
+         org.apache.lucene.document.Document docField = new org.apache.lucene.document.Document(); 
+   
+         //Obtener los Field correspondientes
+        url = new StringField("url", inputFile.getPath(),Store.YES);
+        docField.add(url);
+        
+        threadID=getDataXml(docXml,"Thread","ThreadID",Store.NO);
+        docField.add(threadID);
+        allString+=threadID.stringValue();
+        allString+="||";
 
-	        //inicial
-	        this.userID=getDataXml(docXml, "InitPost", "UserID", Store.YES);
-	        docField.add(this.userID);
-            this.date=getDataXml(docXml, "InitPost", "Date", Store.YES);
-            docField.add(this.date);
-            this.content=getDataXml(docXml, "InitPost", "icontent", Store.YES);
-            docField.add(this.content);
-            this.respuesta=new TextField("respuesta", "NO",Store.NO); // si es respuesta, no se si vale la pena
-            docField.add(this.respuesta);
-            //respuestas
-	        NodeList nList = docXml.getElementsByTagName("Post");
-	        for (int temp = 0; temp < nList.getLength(); temp++) {
-	            this.userID=getDataXml(docXml, "Post", "UserID", Store.NO);
-	            docField.add(this.userID);
-	            this.date=getDataXml(docXml, "Post", "Date", Store.YES);
-	            docField.add(this.date);
-	            this.content=getDataXml(docXml, "Post", "rcontent", Store.YES);
-	            docField.add(this.content);
-	            this.respuesta=new TextField("respuesta", "YES",Store.NO); // si es respuesta, no se si vale la pena
-	            docField.add(this.respuesta);
-	        }
-            
-            return docField;
-	      } 	     	 	
+        //inicial
+        userID=getDataXml(docXml, "InitPost", "UserID", Store.YES);
+        docField.add(userID);
+        allString+=userID.stringValue();
+        allString+="||";
+        date=getDataXml(docXml, "InitPost", "Date", Store.YES);
+        docField.add(date);
+        allString+=date.stringValue();
+        allString+="||";
+        content=getDataXml(docXml, "InitPost", "icontent", Store.YES);
+        docField.add(content);
+        allString+=content.stringValue();
+        allString+="||";
+        respuesta=new TextField("respuesta", "NO",Store.NO); // si es respuesta, no se si vale la pena
+        docField.add(respuesta);
+        //respuestas
+        NodeList nList = docXml.getElementsByTagName("Post");
+        for (int temp = 0; temp < nList.getLength(); temp++) {
+            userID=getDataXml(docXml, "Post", "UserID", Store.NO);
+            docField.add(userID);
+            allString+=userID.stringValue();
+            allString+="||";
+            date=getDataXml(docXml, "Post", "Date", Store.YES);
+            docField.add(date);
+            allString+=date.stringValue();
+            allString+="||";
+            content=getDataXml(docXml, "Post", "rcontent", Store.YES);
+            docField.add(content);
+            allString+=content.stringValue();
+            respuesta=new TextField("respuesta", "YES",Store.NO); // si es respuesta, no se si vale la pena
+            docField.add(respuesta);
+        }
+        all = new TextField("all", allString,Store.NO);
+        docField.add(all);
+        return docField;
+	} 	     	 	
 
-	
+	/**
+	 * Reemplazar caracter & por &amp;
+	 * @param xml : xml en formaton de texto
+	 * @return : Document con el xml tratado por un filtro
+	 * @throws Exception
+	 */
 	public static Document loadXMLFromString(String xml) throws Exception
 	{
-		/**
-		 * Reemplazar caracter & por &amp;
-		 */
 		String xmlModifiado=xml.replaceAll("&", "&amp;");
-		
 	    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 	    DocumentBuilder builder = factory.newDocumentBuilder();
 	    InputSource is = new InputSource(new StringReader(xmlModifiado));
@@ -97,7 +116,14 @@ import org.xml.sax.InputSource;
         return fileData.toString();
     }
 	
-	
+	/**
+	 * Devuelve un Field recuperado de cuerpo del xml
+	 * @param _docXml : Documento xml
+	 * @param nodeParent : Tag contenedor de Tags
+	 * @param node : Tag que tiene el dato en cuestion
+	 * @param stored : Forma de almancenamiento
+	 * @return : Devuelve el Field en cuestion
+	 */
 	private Field getDataXml(Document _docXml,String nodeParent,String node,Store stored){
         NodeList nlParent = _docXml.getElementsByTagName(nodeParent);
         Node nChild = nlParent.item(0);
@@ -111,4 +137,5 @@ import org.xml.sax.InputSource;
             }
 		return null;
 	}
+
 }

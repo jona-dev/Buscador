@@ -12,4 +12,5 @@ public class LuceneConstants {
 	   public static final String CONTENT = "icontent";
 	   public static final String RESPUESTA ="respuesta";
 	   public static final String URL = "url";
+	   public static final String ALL = "all";
 }
