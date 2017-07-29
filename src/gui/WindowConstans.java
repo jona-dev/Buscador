@@ -13,7 +13,8 @@ public class WindowConstans {
 	public static final String CONTENT = "Cotenido";
 	public static final String RESPUESTA ="Respuestas";
 	public static final String ALL = "Todos los atributos";
-	public static final String TEXT_BUTTON_BUSCAR = "Busacar";
+	public static final String TEXT_BUTTON_BUSCAR = "Buscar";
+	public static final String TEXT_BUTTON_INDEXAR = "Indexar";
 	public static final String TEXT_LABEL_BUSCAR= "Ingrese el texto a buscar";
 
 }

@@ -7,6 +7,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import org.apache.lucene.analysis.es.SpanishAnalyzer;
@@ -21,17 +22,31 @@ import org.apache.lucene.search.*;
 import org.apache.lucene.store.*;
 import org.apache.lucene.util.Version;
 
+import gui.WindowConstans;
+
 
 public class SearchIndex implements ActionListener {
 	
 	//Se define el indice
 	private SpanishAnalyzer analizador;                
     private Directory directorioIndex;
+    
+    //componentes para filtro
     private JTextField search_text;
+    private JRadioButton optionUserID;
+    private JRadioButton optionContent;
+    private JRadioButton optionDate;
+    private JRadioButton optionAll;
 
-	public SearchIndex(JTextField _search_text){
+	public SearchIndex(JTextField _search_text,JRadioButton _optionUserID,
+						JRadioButton _optionContent,JRadioButton _optionDate,
+						JRadioButton _optionAll){
 		super();	
 		this.search_text=_search_text;
+		this.optionUserID=_optionUserID;
+		this.optionContent=_optionContent;
+		this.optionDate=_optionDate;
+		this.optionAll=_optionAll;
 	}
 	
     private List<String> searchIndex(String searchString) {
@@ -51,9 +66,17 @@ public class SearchIndex implements ActionListener {
 
             // Analizador en español. Ya contiene los StopWords en español.
             // El mismo analizador se tiene que usar en el indexado y en la busqueda.
-                     
+            
+            String filter;
+            if (this.optionAll.isSelected())
+            	filter=LuceneConstants.ALL;
+            else if (this.optionContent.isSelected())
+            	filter=LuceneConstants.CONTENT;
+            else if (this.optionDate.isSelected())
+            	filter=LuceneConstants.DATE;
+            else filter = LuceneConstants.USER_ID;
 
-            QueryParser qp = new QueryParser(Version.LUCENE_40, LuceneConstants.ALL, analizador);
+            QueryParser qp = new QueryParser(Version.LUCENE_40, filter, analizador);
             Query query = qp.parse(searchString); // parse the query and construct the Query object
 
             TopDocs hits = searcher.search(query, 1000); // run the query

@@ -14,6 +14,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
+import finder.Indexador;
 import finder.SearchIndex;
 
 public class Window extends JFrame {
@@ -36,6 +37,8 @@ public class Window extends JFrame {
         JRadioButton optionContent = new JRadioButton(WindowConstans.CONTENT);
         JRadioButton optionDate = new JRadioButton(WindowConstans.DATE);
         JRadioButton optionAll = new JRadioButton(WindowConstans.ALL);
+
+        optionAll.setSelected(true);
         
         ButtonGroup RBGFileter = new ButtonGroup();
         RBGFileter.add(optionUserID);
@@ -63,9 +66,12 @@ public class Window extends JFrame {
 
         //Definición del boton de busqueda
         JPanel buttonPanel = new JPanel();
+		JButton buttonIndexar = new JButton(WindowConstans.TEXT_BUTTON_INDEXAR);
 		JButton buttonSearch = new JButton(WindowConstans.TEXT_BUTTON_BUSCAR);
+		buttonPanel.add(buttonIndexar);
 		buttonPanel.add(buttonSearch);
-		buttonSearch.addActionListener(new SearchIndex(search_text));
+		buttonSearch.addActionListener(new SearchIndex(search_text,optionUserID,optionContent,optionDate,optionAll));
+		buttonIndexar.addActionListener(new Indexador());
         
         
         //Asignación de panels al cotainer
@@ -79,3 +85,4 @@ public class Window extends JFrame {
 	}
 
 }
+
