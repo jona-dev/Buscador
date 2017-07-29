@@ -1,3 +1,4 @@
+package finder;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -19,6 +20,8 @@ import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
 import org.xml.sax.SAXException;
 
+import gui.Window;
+
 
 
 public class Indexador {
@@ -26,9 +29,9 @@ public class Indexador {
 	public static IndexWriter writer;
 
 	public static void main(String[] args) throws Exception {
-//					AddDocumentToIndex(LuceneConstants.HOMEPATH);
-					Searcher searcher = new Searcher();
-					List<String> ResultList = searcher.searchIndex("shopaddict");
+//		AddDocumentToIndex(LuceneConstants.HOMEPATH);
+		Window window = new Window();
+		window.ShowWindows();
 		
 	}
 

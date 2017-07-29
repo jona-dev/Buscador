@@ -1,3 +1,4 @@
+package finder;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

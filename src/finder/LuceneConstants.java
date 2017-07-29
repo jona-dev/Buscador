@@ -1,3 +1,4 @@
+package finder;
 import org.apache.lucene.document.Field;
 
 public class LuceneConstants {

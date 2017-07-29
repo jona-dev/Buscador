@@ -1,7 +1,14 @@
+package finder;
 
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JTextField;
+
 import org.apache.lucene.analysis.es.SpanishAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexReader;
@@ -14,13 +21,20 @@ import org.apache.lucene.search.*;
 import org.apache.lucene.store.*;
 import org.apache.lucene.util.Version;
 
-/**
- *
- * @author proyectosbeta
- */
-public class Searcher {
-    // Metodo para buscar.
-    public List<String> searchIndex(String searchString) {
+
+public class SearchIndex implements ActionListener {
+	
+	//Se define el indice
+	private SpanishAnalyzer analizador;                
+    private Directory directorioIndex;
+    private JTextField search_text;
+
+	public SearchIndex(JTextField _search_text){
+		super();	
+		this.search_text=_search_text;
+	}
+	
+    private List<String> searchIndex(String searchString) {
         // Variables
         List<String> listaResultado = new ArrayList<String>();
     
@@ -29,8 +43,8 @@ public class Searcher {
         try {
         	
         	//Se define el indice
-    		SpanishAnalyzer analizador = new SpanishAnalyzer(Version.LUCENE_40);                
-            Directory directorioIndex = new SimpleFSDirectory(new File(LuceneConstants.HOMEPATH+LuceneConstants.INDICE));
+    		analizador = new SpanishAnalyzer(Version.LUCENE_40);                
+            directorioIndex = new SimpleFSDirectory(new File(LuceneConstants.HOMEPATH+LuceneConstants.INDICE));
             
             IndexReader reader = IndexReader.open(directorioIndex);
             IndexSearcher searcher = new IndexSearcher(reader);
@@ -59,4 +73,11 @@ public class Searcher {
         }
         return listaResultado;
     } // Fin de la clase publica searchIndex.
-} // Fin de la clase Searcher.
+
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		System.out.println("BUSCANDO...");
+		searchIndex(this.search_text.getText().toString());
+		System.out.println("FIN DE LA BUSQUEDA");
+	}
+}
