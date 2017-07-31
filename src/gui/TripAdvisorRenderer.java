@@ -28,10 +28,7 @@ public class TripAdvisorRenderer extends JLabel implements ListCellRenderer<Trip
     public Component getListCellRendererComponent(JList<? extends TripAdvisorFile> list, TripAdvisorFile tripAdvisor, int index,
             boolean isSelected, boolean cellHasFocus) {
  
-//        ImageIcon imageIcon = new ImageIcon(getClass().getResource("/images/" + code + ".png"));
-//        setIcon(imageIcon);
-//        setText(tripAdvisor.getName());
-    	content=tripAdvisor;
+       content=tripAdvisor;
        setText(tripAdvisor.getFileName());
        setToolTipText(tripAdvisor.getUrl());
  

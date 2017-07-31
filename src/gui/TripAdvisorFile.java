@@ -20,9 +20,8 @@ public class TripAdvisorFile {
 		this.url = url;
 	}
 	public String getFileName() {
-//		String separador ="\\";
-//		String name = url.split(separador)[1];
-		return url.substring(104, url.length()); // no pude hacer andar el split, no se porque no funca
+		int index =url.indexOf("NewYork_");
+		return url.substring(index+10, url.length()); 
 		
 	}
 	public void setUserName(String fileName) {
