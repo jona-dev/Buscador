@@ -2,6 +2,7 @@ package finder;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -20,16 +21,20 @@ import org.apache.lucene.store.SimpleFSDirectory;
 import org.apache.lucene.util.Version;
 import org.xml.sax.SAXException;
 
+import gui.ListTripAdvisor;
+import gui.TripAdvisorFile;
 import gui.Window;
 
 
 
 public class principal {
-	
+//	private List<TripAdvisorFile> resultados = new ArrayList<TripAdvisorFile>();
+//	private ListTripAdvisor resultWindows;
 
 	public static void main(String[] args) {
 		Window window = new Window();
 		window.ShowWindows();
+//		this.resultWindows=new ListTripAdvisor(resultados);
 	}
 
 }

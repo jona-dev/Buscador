@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -17,10 +19,13 @@ import javax.swing.border.Border;
 import finder.Indexador;
 import finder.SearchIndex;
 
+
 public class Window extends JFrame {
-		
-	public Window(){
+//	private ListTripAdvisor resultWindows;
+	
+	public Window( ){
 		super(WindowConstans.TITLE_WINDOWS);
+//		this.resultWindows=_resultados;
 		this.setSize(WindowConstans.WINDOW_HEGHT, WindowConstans.WINDOW_WIDTH);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.AddComponents();
@@ -70,7 +75,7 @@ public class Window extends JFrame {
 		JButton buttonSearch = new JButton(WindowConstans.TEXT_BUTTON_BUSCAR);
 		buttonPanel.add(buttonIndexar);
 		buttonPanel.add(buttonSearch);
-		buttonSearch.addActionListener(new SearchIndex(search_text,optionUserID,optionContent,optionDate,optionAll));
+		buttonSearch.addActionListener(new SearchIndex(search_text,optionUserID,optionContent,optionDate,optionAll));//paso como parametro porque no me quiero romper la cabeza pensando la merjo forma de llamar a los resultados
 		buttonIndexar.addActionListener(new Indexador());
         
         

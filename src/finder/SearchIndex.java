@@ -22,10 +22,13 @@ import org.apache.lucene.search.*;
 import org.apache.lucene.store.*;
 import org.apache.lucene.util.Version;
 
+import gui.ListTripAdvisor;
+import gui.TripAdvisorFile;
 import gui.WindowConstans;
 
 
 public class SearchIndex implements ActionListener {
+	private ListTripAdvisor resultWindows;
 	
 	//Se define el indice
 	private SpanishAnalyzer analizador;                
@@ -47,11 +50,12 @@ public class SearchIndex implements ActionListener {
 		this.optionContent=_optionContent;
 		this.optionDate=_optionDate;
 		this.optionAll=_optionAll;
+//		this.resultWindows=_resultWindows;
 	}
 	
-    private List<String> searchIndex(String searchString) {
+    private List<TripAdvisorFile> searchIndex(String searchString) {
         // Variables
-        List<String> listaResultado = new ArrayList<String>();
+        List<TripAdvisorFile> listaResultado = new ArrayList<TripAdvisorFile>();
     
         System.out.println("Searching.... '" + searchString + "'");
         
@@ -79,16 +83,15 @@ public class SearchIndex implements ActionListener {
             QueryParser qp = new QueryParser(Version.LUCENE_40, filter, analizador);
             Query query = qp.parse(searchString); // parse the query and construct the Query object
 
-            TopDocs hits = searcher.search(query, 1000); // run the query
+            TopDocs hits = searcher.search(query, 5000); // run the query
 
             if (hits.totalHits == 0) {
                 System.out.println("No data found.");
             }else {
                 for (int i = 0; i < hits.totalHits; i++) {
                     Document doc = searcher.doc(hits.scoreDocs[i].doc); // get the next document
-                    String url = doc.get("url"); // get its path field
-                    System.out.println("Found in :: " + url);
-                    listaResultado.add(url);
+                    TripAdvisorFile TripAdvisorFile = new TripAdvisorFile(doc.get("url"),doc.get("UserID"));
+                    listaResultado.add(TripAdvisorFile);
                 }
             }
         } catch (Exception e) {
@@ -101,6 +104,7 @@ public class SearchIndex implements ActionListener {
 	public void actionPerformed(ActionEvent arg0) {
 		System.out.println("BUSCANDO...");
 		searchIndex(this.search_text.getText().toString());
+		this.resultWindows=new ListTripAdvisor(searchIndex(this.search_text.getText().toString()));
 		System.out.println("FIN DE LA BUSQUEDA");
 	}
 }

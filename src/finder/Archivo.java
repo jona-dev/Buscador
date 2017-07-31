@@ -103,7 +103,7 @@ import org.xml.sax.InputSource;
 	    return builder.parse(is);
 	}
 	
-	private String readFileAsString(String filePath) throws IOException {
+	public static String readFileAsString(String filePath) throws IOException {
         StringBuffer fileData = new StringBuffer();
         BufferedReader reader = new BufferedReader(
                 new FileReader(filePath));
