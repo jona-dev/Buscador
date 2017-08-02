@@ -14,10 +14,11 @@ import org.apache.lucene.util.Version;
 
 public class Indexador implements ActionListener{
 	public static IndexWriter writer;
-	
 	/**
-	 *  Metodo que carga todos los documentos al indicen
-	 **/
+	 * Metodo que carga todos los documentos al indicen
+	 * @param indexPath, directorio con los archivos
+	 * @throws Exception
+	 */
 	private static void AddDocumentToIndex(String indexPath) throws Exception{
 
 		//Se carga
@@ -29,20 +30,22 @@ public class Indexador implements ActionListener{
 		
         long count=0;
 		File directory = new File(indexPath+LuceneConstants.FILE_PATH);
-		count=directory.length();
+//		count=directory.length();
 		for(File folders : directory.listFiles()){//newyork
 			if (folders.isDirectory())
 				for(File documents : folders.listFiles()){
 					if (documents.isFile()){
 					Archivo archivo = new Archivo();
 					org.apache.lucene.document.Document documento = archivo.addFile(new File(documents.getPath()));
-					iwriter.addDocument(documento);
+					if (documento != null)
+						iwriter.addDocument(documento);
 					}
-					System.out.println(". . ." + count--);
+//					System.out.println(". . ." + count--);
 				}
 			}
 		iwriter.close();
 	}
+
 
 	@Override
 	public void actionPerformed(ActionEvent e) {

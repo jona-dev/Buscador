@@ -22,10 +22,17 @@ import org.xml.sax.InputSource;
 
 	public class Archivo  {
 		
-	  
-	@SuppressWarnings("deprecation")
-	public org.apache.lucene.document.Document  addFile(File inputFile) throws Exception{
 		
+		
+	@SuppressWarnings("deprecation")
+	/**
+	 * Toma un archivo y lo formatea agregandolo al indice
+	 * @param inputFile , Archivo a leer
+	 * @return
+	 * @throws Exception
+	 */
+	public org.apache.lucene.document.Document  addFile(File inputFile) throws Exception{
+//		System.out.println(inputFile.getPath());
 		//declaración de datos importantes  de los post
 		 Field threadID;
 		 Field userID;
@@ -38,6 +45,11 @@ import org.xml.sax.InputSource;
 		 
 		 //Estructura para poder leer el archivo xml
 		 Document docXml = loadXMLFromString(readFileAsString(inputFile.getPath()));
+		 if (docXml == null){
+			 allString="";
+			 return null;
+		 }
+			 
          docXml.getDocumentElement().normalize();
          //Documento a importar al indice.
          org.apache.lucene.document.Document docField = new org.apache.lucene.document.Document(); 
@@ -53,35 +65,54 @@ import org.xml.sax.InputSource;
 
         //inicial
         userID=getDataXml(docXml, "InitPost", "UserID", Store.YES);
+        if (userID==null){
+        	allString="";
+        	return null;
+        }
         docField.add(userID);
         allString+=userID.stringValue();
         allString+="||";
         date=getDataXml(docXml, "InitPost", "Date", Store.YES);
+        if (date==null){
+        	allString="";
+        	return null;
+        }
         docField.add(date);
         allString+=date.stringValue();
         allString+="||";
         content=getDataXml(docXml, "InitPost", "icontent", Store.YES);
+        if (content==null){
+        	allString="";
+        	return null;
+        }
         docField.add(content);
         allString+=content.stringValue();
-        allString+="||";
-        respuesta=new TextField("respuesta", "NO",Store.NO); // si es respuesta, no se si vale la pena
-        docField.add(respuesta);
         //respuestas
         NodeList nList = docXml.getElementsByTagName("Post");
         for (int temp = 0; temp < nList.getLength(); temp++) {
             userID=getDataXml(docXml, "Post", "UserID", Store.NO);
+            if (userID==null){
+            	allString="";
+            	return null;
+            }
             docField.add(userID);
             allString+=userID.stringValue();
             allString+="||";
             date=getDataXml(docXml, "Post", "Date", Store.YES);
+            if (date==null){
+            	allString="";
+            	return null;
+            }
             docField.add(date);
             allString+=date.stringValue();
             allString+="||";
             content=getDataXml(docXml, "Post", "rcontent", Store.YES);
+            if (content==null){
+            	allString="";
+            	return null;
+            }
             docField.add(content);
             allString+=content.stringValue();
-            respuesta=new TextField("respuesta", "YES",Store.NO); // si es respuesta, no se si vale la pena
-            docField.add(respuesta);
         }
         all = new TextField("all", allString,Store.NO);
         docField.add(all);
@@ -96,11 +127,18 @@ import org.xml.sax.InputSource;
 	 */
 	public static Document loadXMLFromString(String xml) throws Exception
 	{
+		try{
 		String xmlModifiado=xml.replaceAll("&", "&amp;");
+		//Se detecto una convinación que causa error en el parser xml
+		xmlModifiado=xml.replaceAll("<3", "3");
 	    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 	    DocumentBuilder builder = factory.newDocumentBuilder();
 	    InputSource is = new InputSource(new StringReader(xmlModifiado));
 	    return builder.parse(is);
+		}catch(Exception e){
+			System.out.println("El documento posee un caracter que no logra ser interpretado correctamente.");
+			return null;	
+		}
 	}
 	
 	public static String readFileAsString(String filePath) throws IOException {
@@ -126,6 +164,7 @@ import org.xml.sax.InputSource;
 	 * @return : Devuelve el Field en cuestion
 	 */
 	private Field getDataXml(Document _docXml,String nodeParent,String node,Store stored){
+		try{
         NodeList nlParent = _docXml.getElementsByTagName(nodeParent);
         Node nChild = nlParent.item(0);
 	    if (nChild.getNodeType() == Node.ELEMENT_NODE) {
@@ -136,6 +175,10 @@ import org.xml.sax.InputSource;
             else
             	return new TextField(node, eThread.getElementsByTagName(node).item(0).getTextContent(), stored);
             }
+		}catch(Exception e){
+			System.out.println("el formato del archivo no respeta el standar");
+			return null;
+		}
 		return null;
 	}
 

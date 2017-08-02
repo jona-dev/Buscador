@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
@@ -50,9 +51,14 @@ public class SearchIndex implements ActionListener {
 		this.optionContent=_optionContent;
 		this.optionDate=_optionDate;
 		this.optionAll=_optionAll;
-//		this.resultWindows=_resultWindows;
+
 	}
 	
+	/**
+	 * Metodo de busqueda en el indece ya creado
+	 * @param searchString, contenido a buscar
+	 * @return
+	 */
     private List<TripAdvisorFile> searchIndex(String searchString) {
         // Variables
         List<TripAdvisorFile> listaResultado = new ArrayList<TripAdvisorFile>();
@@ -83,7 +89,7 @@ public class SearchIndex implements ActionListener {
             QueryParser qp = new QueryParser(Version.LUCENE_40, filter, analizador);
             Query query = qp.parse(searchString); // parse the query and construct the Query object
 
-            TopDocs hits = searcher.search(query, 5000); // run the query
+            TopDocs hits = searcher.search(query, LuceneConstants.TOTAL_RESULT); // run the query
 
             if (hits.totalHits == 0) {
                 System.out.println("No data found.");
@@ -96,6 +102,7 @@ public class SearchIndex implements ActionListener {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println( e.getMessage());
         }
         return listaResultado;
     } // Fin de la clase publica searchIndex.

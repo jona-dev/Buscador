@@ -3,15 +3,13 @@ package gui;
 public class TripAdvisorFile {
 
 	private String url;
-	private String userName;
+
 	
 	public TripAdvisorFile(){
 		this.setUrl("");
-		this.setUserName("");
 	}
 	public TripAdvisorFile(String _url, String _userName){
 		this.setUrl(_url);
-		this.setUserName(_userName);
 	}
 	public String getUrl() {
 		return url;
@@ -24,11 +22,6 @@ public class TripAdvisorFile {
 		return url.substring(index+10, url.length()); 
 		
 	}
-	public void setUserName(String fileName) {
-		this.userName = fileName;
-	}
-	public void getUserName(String fileName) {
-		this.userName = fileName;
-	}	
+
 	
 }

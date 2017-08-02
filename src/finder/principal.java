@@ -28,13 +28,10 @@ import gui.Window;
 
 
 public class principal {
-//	private List<TripAdvisorFile> resultados = new ArrayList<TripAdvisorFile>();
-//	private ListTripAdvisor resultWindows;
 
 	public static void main(String[] args) {
 		Window window = new Window();
 		window.ShowWindows();
-//		this.resultWindows=new ListTripAdvisor(resultados);
 	}
 
 }
