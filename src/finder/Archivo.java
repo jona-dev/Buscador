@@ -13,11 +13,13 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.document.Field.Store;
 import org.apache.lucene.document.StringField;
 import org.apache.lucene.document.TextField;
+import org.apache.lucene.queryparser.ext.Extensions.Pair;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+
 
 
 	public class Archivo  {
@@ -138,6 +140,7 @@ import org.xml.sax.InputSource;
 		}catch(Exception e){
 			System.out.println("El documento posee un caracter que no logra ser interpretado correctamente.");
 			return null;	
+			
 		}
 	}
 	
@@ -182,4 +185,6 @@ import org.xml.sax.InputSource;
 		return null;
 	}
 
+
+	
 }

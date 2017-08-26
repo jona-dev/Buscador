@@ -18,10 +18,12 @@ import javax.swing.border.Border;
 
 import finder.Indexador;
 import finder.SearchIndex;
-
+	
 
 public class Window extends JFrame {
-//	private ListTripAdvisor resultWindows;
+	
+	public static JTextField pathText;
+	
 	
 	public Window( ){
 		super(WindowConstans.TITLE_WINDOWS);
@@ -64,10 +66,14 @@ public class Window extends JFrame {
 		JPanel dataPanel = new JPanel();
 		dataPanel.setLayout(new GridLayout(2,2));
 		JLabel search_label = new JLabel(WindowConstans.TEXT_LABEL_BUSCAR);
-		JTextField search_text = new JTextField(50);
+		JLabel path_label = new JLabel(WindowConstans.TEXT_LABEL_PATH);
+		pathText =new JTextField(100);
+		JTextField search_text = new JTextField(100);
 		dataPanel.add(search_label);
 		dataPanel.add(search_text);
-		dataPanel.add(new JLabel(" ")); //Agrego un label vacio porque si no no se como hacer para que no me coma espacio el panel de abajo
+		dataPanel.add(path_label);
+		dataPanel.add(pathText);
+
 
         //Definición del boton de busqueda
         JPanel buttonPanel = new JPanel();
@@ -75,8 +81,8 @@ public class Window extends JFrame {
 		JButton buttonSearch = new JButton(WindowConstans.TEXT_BUTTON_BUSCAR);
 		buttonPanel.add(buttonIndexar);
 		buttonPanel.add(buttonSearch);
-		buttonSearch.addActionListener(new SearchIndex(search_text,optionUserID,optionContent,optionDate,optionAll));//paso como parametro porque no me quiero romper la cabeza pensando la merjo forma de llamar a los resultados
-		buttonIndexar.addActionListener(new Indexador());
+		buttonSearch.addActionListener(new SearchIndex(search_text,optionUserID,optionContent,optionDate,optionAll,this.pathText));
+		buttonIndexar.addActionListener(new Indexador(pathText,this));
         
         
         //Asignación de panels al cotainer

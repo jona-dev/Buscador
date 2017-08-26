@@ -4,10 +4,13 @@ package finder;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
@@ -25,6 +28,7 @@ import org.apache.lucene.util.Version;
 
 import gui.ListTripAdvisor;
 import gui.TripAdvisorFile;
+import gui.ViwerResultMetric;
 import gui.WindowConstans;
 
 
@@ -41,17 +45,22 @@ public class SearchIndex implements ActionListener {
     private JRadioButton optionContent;
     private JRadioButton optionDate;
     private JRadioButton optionAll;
+    
+    private JTextField pathText;
+    
+    public static Metricas m;
 
 	public SearchIndex(JTextField _search_text,JRadioButton _optionUserID,
 						JRadioButton _optionContent,JRadioButton _optionDate,
-						JRadioButton _optionAll){
+						JRadioButton _optionAll,JTextField _pathText){
 		super();	
 		this.search_text=_search_text;
 		this.optionUserID=_optionUserID;
 		this.optionContent=_optionContent;
 		this.optionDate=_optionDate;
 		this.optionAll=_optionAll;
-
+		this.pathText=_pathText;
+		this.m =null;
 	}
 	
 	/**
@@ -63,19 +72,18 @@ public class SearchIndex implements ActionListener {
         // Variables
         List<TripAdvisorFile> listaResultado = new ArrayList<TripAdvisorFile>();
     
-        System.out.println("Searching.... '" + searchString + "'");
+        System.out.println("Searching...."+this.pathText.getText().toString()+"...'" + searchString + "'");
         
         try {
         	
+        	
         	//Se define el indice
     		analizador = new SpanishAnalyzer(Version.LUCENE_40);                
-            directorioIndex = new SimpleFSDirectory(new File(LuceneConstants.HOMEPATH+LuceneConstants.INDICE));
+            directorioIndex = new SimpleFSDirectory(new File(this.pathText.getText().toString()+LuceneConstants.INDICE));
             
             IndexReader reader = IndexReader.open(directorioIndex);
             IndexSearcher searcher = new IndexSearcher(reader);
 
-            // Analizador en español. Ya contiene los StopWords en español.
-            // El mismo analizador se tiene que usar en el indexado y en la busqueda.
             
             String filter;
             if (this.optionAll.isSelected())
@@ -94,7 +102,7 @@ public class SearchIndex implements ActionListener {
             if (hits.totalHits == 0) {
                 System.out.println("No data found.");
             }else {
-                for (int i = 0; i < hits.totalHits; i++) {
+                for (int i = 0; i < LuceneConstants.TOTAL_RESULT; i++) {
                     Document doc = searcher.doc(hits.scoreDocs[i].doc); // get the next document
                     TripAdvisorFile TripAdvisorFile = new TripAdvisorFile(doc.get("url"),doc.get("UserID"));
                     listaResultado.add(TripAdvisorFile);
@@ -110,8 +118,13 @@ public class SearchIndex implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		System.out.println("BUSCANDO...");
-		searchIndex(this.search_text.getText().toString());
-		this.resultWindows=new ListTripAdvisor(searchIndex(this.search_text.getText().toString()));
+	    List<TripAdvisorFile> results = searchIndex(this.search_text.getText().toString());
+		this.resultWindows = new ListTripAdvisor(results);
+		//Indexador.m.getRecall(this.search_text.getText().toString(),results);
+		//Indexador.m.getPrecision(this.search_text.getText().toString(),results);
+		if (m== null)
+			m = new Metricas (this.pathText);
+		new ViwerResultMetric(this.search_text, results);
 		System.out.println("FIN DE LA BUSQUEDA");
 	}
 }

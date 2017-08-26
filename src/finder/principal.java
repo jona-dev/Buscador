@@ -15,6 +15,7 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexWriterConfig.OpenMode;
+import org.apache.lucene.queryparser.ext.Extensions.Pair;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.SimpleFSDirectory;
@@ -32,6 +33,8 @@ public class principal {
 	public static void main(String[] args) {
 		Window window = new Window();
 		window.ShowWindows();
+
+		
 	}
 
 }

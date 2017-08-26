@@ -7,6 +7,8 @@ public class WindowConstans {
 	public static int RESULT_HEGHT=300;
 	public static int VIWER_WIDTH=500;
 	public static int VIWER_HEGHT=500;
+	public static int RESTVIWER_WIDTH=250;
+	public static int RESTVIWER_HEGHT=100;
 	
 	
 	public static int PANEL_FILTER_WIDTH=200;
@@ -15,6 +17,7 @@ public class WindowConstans {
 	public static final String TITLE_WINDOWS="Buscador";
 	public static final String TITLE_RESULT="Buscador";
 	public static final String TITLE_VIWER="Visor de documentos";
+	public static final String TITLE_RESTVIWER="Visor de metricas";
 		
 	public static final String USER_ID ="Identificación del usuario";
 	public static final String DATE ="Fecha del post";
@@ -23,6 +26,7 @@ public class WindowConstans {
 	public static final String ALL = "Todos los atributos";
 	public static final String TEXT_BUTTON_BUSCAR = "Buscar";
 	public static final String TEXT_BUTTON_INDEXAR = "Indexar";
-	public static final String TEXT_LABEL_BUSCAR= "Ingrese el texto a buscar";
+	public static final String TEXT_LABEL_BUSCAR= "  Ingrese el texto a buscar";
+	public static final String TEXT_LABEL_PATH= "  Ingrese el path de TripAdvisor";
 
 }
